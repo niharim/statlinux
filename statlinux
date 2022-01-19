@@ -1,0 +1,59 @@
+ALGORITHM:
+	•	Start
+	•	Get the file name from the user.
+	•	Print the details of the file such as, user id, file size, group id, file permission.
+	•	Stop
+CODE:
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <time.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <time.h>
+#include <string.h>
+void sfile(char const fname[]);
+void main()
+{
+ struct stat buf;
+ char ntime[100], filename[20];
+ FILE *fptr;
+ printf("Enter the filename: ");
+ scanf("%s",filename);
+ fptr = fopen(filename, "r");
+ if (fptr == NULL)
+ {
+ printf("File Not Found!");
+ exit(0);
+ }
+ else
+ {
+ sfile(filename); 
+ }
+ stat(filename, &buf);
+ printf("Mode = %o\n", buf.st_mode);
+ strcpy(ntime, ctime(&buf.st_mtime));
+ printf("Created = %s\n", ntime); 
+}
+void sfile(char const fname[]){
+ struct stat sfile;
+ if(stat(fname,&sfile)==-1){
+ printf("Error Occurred\n");
+ }
+ printf("Uid: %d \n",sfile.st_uid); 
+ printf("Group id: %d \n",sfile.st_gid); 
+ printf("Size: %ld bytes \n",sfile.st_size); 
+ printf("Links: %u \n",(unsigned int)sfile.st_nlink); 
+ printf("File Permissions User (");
+ printf((sfile.st_mode & S_IRUSR)? "r":"-"); 
+ printf((sfile.st_mode & S_IWUSR)? "w":"-"); 
+ printf((sfile.st_mode & S_IXUSR)? "x":"-");  
+ printf("\n");
+}
